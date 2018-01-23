@@ -6,11 +6,11 @@ import rospy
 from sensor_msgs.msg import JointState
 import math as m
 
-# HOST = '192.168.1.12'     # The remote host
-# PORT = 30002              # The same port as used by the server
+HOST = '192.168.1.12'     # The remote host
+PORT = 30002              # The same port as used by the server
 
-# s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# s.connect((HOST, PORT))
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect((HOST, PORT))
 
 time.sleep(0.05)
 
@@ -24,7 +24,7 @@ time.sleep(0.05)
 def move_to_waypoint(wp):
 # sends the waypoint to the socket w/ a=0.2 and v=0.1
     wp_r = [i * m.pi/180 for i in wp.position] # way point (joint angles) in radians
-    # s.send("movej([" + str(wp_r[0]) + ", " + str(wp_r[1]) + ", " + str(wp_r[2]) + ", " + str(wp_r[3]) + ", " + str(wp_r[4]) + ", " + str(wp_r[5]) + "], a=0.2, v=0.1)\n")
+    s.send("movej([" + str(wp_r[0]) + ", " + str(wp_r[1]) + ", " + str(wp_r[2]) + ", " + str(wp_r[3]) + ", " + str(wp_r[4]) + ", " + str(wp_r[5]) + "], a=0.2, v=0.1)\n")
     print(" the command send to socket is: movej([" + str(wp_r[0]) + ", " + str(wp_r[1]) + ", " + str(wp_r[2]) + ", " + str(wp_r[3]) + ", " + str(wp_r[4]) + ", " + str(wp_r[5]) + "], a=0.2, v=0.1)\n")
     time.sleep(15)
 
@@ -41,4 +41,4 @@ if __name__ == '__main__':
         ur5_joint_angles_node()
     except rospy.ROSInterruptException:
         pass
-    # s.close()
+    s.close()
