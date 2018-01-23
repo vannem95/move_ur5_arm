@@ -23,8 +23,8 @@ time.sleep(0.05)
 
 def move_to_waypoint(wp):
 # sends the waypoint to the socket w/ a=0.2 and v=0.1
-    s.send("movej([p" + str(wp.linear[0]) + ", " + str(wp.linear[1]) + ", " + str(wp.linear[2]) + ", " + str(wp.angular[0]) + ", " + str(wp.angular[1]) + ", " + str(wp.angular[2]) + "], a=0.2, v=0.1)\n")
-    print(" the command send to socket is: movej([p" + str(wp.linear[0]) + ", " + str(wp.linear[1]) + ", " + str(wp.linear[2]) + ", " + str(wp.angular[0]) + ", " + str(wp.angular[1]) + ", " + str(wp.angular[2]) + "], a=0.2, v=0.1)\n")o
+    s.send("movej([p" + str(wp.linear.x) + ", " + str(wp.linear.y) + ", " + str(wp.linear.z) + ", " + str(wp.angular.x) + ", " + str(wp.angular.y) + ", " + str(wp.angular.z) + "], a=0.2, v=0.1)\n")
+    print(" the command send to socket is: movej([p" + str(wp.linear.x) + ", " + str(wp.linear.y) + ", " + str(wp.linear.z) + ", " + str(wp.angular.x) + ", " + str(wp.angular.y) + ", " + str(wp.angular.z) + "], a=0.2, v=0.1)\n")
     time.sleep(15)
 
    
