@@ -5,7 +5,7 @@ import time
 import rospy
 from std_msgs.msg import Bool
 
-device = rospy.get_param('device','/dev/ttyUSB0')
+device = rospy.get_param('device')
 
 ser = serial.Serial(port=device,baudrate=115200,timeout=1,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,bytesize=serial.EIGHTBITS)
 
