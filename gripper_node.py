@@ -11,6 +11,7 @@ time.sleep(0.05)
 
 def open_close(switch):
 # opens / closes the gripper
+    print "switch:",switch
     if 1 == switch:
         print "Closing gripper"
         ser.write("\x09\x10\x03\xE8\x00\x03\x06\x09\x00\x00\xFF\xFF\xFF\x42\x29")
