@@ -1,0 +1,5 @@
+<launch>
+  <node name="gripper_node" pkg="move_ur5_arm" type="gripper_node">
+    <param name="device" value="/dev/ttyUSB0" />
+  </node>
+</launch>
