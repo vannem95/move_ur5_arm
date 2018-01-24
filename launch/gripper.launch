@@ -1,5 +1,5 @@
 <launch>
-  <node name="gripper_node" pkg="move_ur5_arm" type="gripper_node">
+  <node name="gripper_node" pkg="move_ur5_arm" type="gripper_node.py">
     <param name="device" value="/dev/ttyUSB0" />
   </node>
 </launch>
