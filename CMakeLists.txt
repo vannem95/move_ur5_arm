@@ -55,9 +55,8 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## Generate services in the 'srv' folder
 add_service_files(
-#   FILES
-#   Service1.srv
-    ur5_line_move.srv
+  FILES
+  ur5_line_move.srv
 )
 
 ## Generate actions in the 'action' folder
@@ -69,9 +68,9 @@ add_service_files(
 
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
-#   DEPENDENCIES
+  DEPENDENCIES
 #   geometry_msgs
-    std_msgs
+  std_msgs
 )
 
 ################################################

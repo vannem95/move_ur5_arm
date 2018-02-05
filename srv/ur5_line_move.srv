@@ -1,4 +1,4 @@
-string a
+string  a
 float64 b
 ---
 string sum
