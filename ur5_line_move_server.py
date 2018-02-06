@@ -32,22 +32,22 @@ def move_to_waypoint(req):
     elif "destination" == req.a:
         point = [-324.98/1000,-127.38/1000,130.18/1000,2.2745,-2.1644,-0.0242]
     elif "up" == req.a:
-        last_point[2] = last_point[2] + req.b
+        last_point[2] = last_point[2] + (req.b/1000)
         point = last_point
     elif "down" == req.a:
-        last_point[2] = last_point[2] - req.b
+        last_point[2] = last_point[2] - (req.b/1000)
         point = last_point
     elif "left" == req.a:
-        last_point[1] = last_point[1] + req.b
+        last_point[1] = last_point[1] + (req.b/1000)
         point = last_point
     elif "right" == req.a:
-        last_point[1] = last_point[1] + req.b
+        last_point[1] = last_point[1] + (req.b/1000)
         point = last_point
     elif "forward" == req.a:
-        last_point[0] = last_point[0] - req.b
+        last_point[0] = last_point[0] - (req.b/1000)
         point = last_point
     elif "backward" == req.a:
-        last_point[0] = last_point[0] + req.b
+        last_point[0] = last_point[0] + (req.b/1000)
         point = last_point
     else:
         print "wrong mode option"
