@@ -1,6 +1,6 @@
 <launch>
-  <arg name="device"/>
   <node name="gripper_node" pkg="move_ur5_arm" type="gripper_node.py">
-    <param name="device" value="$(arg device)" type="str"/>
+  </node>
+  <node name="ur5_line_move_server" pkg="move_ur5_arm" type="ur5_line_move_server.py">
   </node>
 </launch>
