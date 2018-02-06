@@ -32,7 +32,8 @@ def move_to_waypoint(req):
     elif "destination"==req.a:
         point = [1,2,3,4,5,6]
     elif "up"==req.a:
-        point = [1,2,3+req.b,4,5,6]
+        last_point[2] = last_point[2] + req.b
+        point = last_point
     elif "down"==req.a:
         point = [1,2,3-req.b,4,5,6]
     elif "left"==req.a:
@@ -43,20 +44,22 @@ def move_to_waypoint(req):
         point = [1+req.b,2,3,4,5,6]
     elif "backward"==req.a:
         point = [1-req.b,2,3,4,5,6]
-    else
+    else:
+        print "wrong mode option"
 
     last_point = point
 
     # s.send("movel(p[" + str(point[0]) + ", " + str(point[1]) + ", " + str(point[2]) + ", " + str(point[3]) + ", " + str(point[4]) + ", " + str(point[5]) + "], a=0.2, v=0.1)\n")
     print(" the command send to socket is: movel(p[" + str(point[0]) + ", " + str(point[1]) + ", " + str(point[2]) + ", " + str(point[3]) + ", " + str(point[4]) + ", " + str(point[5]) + "], a=0.2, v=0.1)\n")
     # time.sleep(15)
+    return ur5_line_moveResponse("reached")
 
 
 def ur5_line_move_server():
 # starts a service that takes direction(up/down/left/right/forward/backward)/checkpoint() and distance/0 
     rospy.init_node('ur5_line_move_server', anonymous=True)
-    serv = rospy.Service('ur5_line_move', ur5_line_move, move_to_waypoint)
-    rospy.loginfo('Service initiated...\nArguments are \n1. Direction/Checkpoint {{home/midpoint/destination} {up/down/left/right/forward/backward -- from destination} }\n2. Distance(in m) {'0' zero if a checkpoint is chosen}')
+    serv = rospy.Service('ur5_line_move_service', ur5_line_move, move_to_waypoint)
+    rospy.loginfo('Service initiated...\nArguments are \n1. Direction/Checkpoint {{home/midpoint/destination} {up/down/left/right/forward/backward -- from destination} }\n2. Distance(in m) {""0"" zero if a checkpoint is chosen}')
     rospy.spin()
 
 if __name__ == '__main__':
