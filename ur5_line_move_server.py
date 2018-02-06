@@ -6,14 +6,21 @@ import rospy
 from geometry_msgs.msg import Twist
 from move_ur5_arm.srv import *
 import math as m
+from std_msgs.msg import Bool
+
 
 last_point=[110.39/1000,-323.23/1000,97.79/1000,3.1299,-0.0030,-0.0159]
 
 HOST = '192.168.1.6'     # The remote host
-PORT = 30002              # The same port as used by the server
+PORT = 30002             # Zacobria has more info about the other ports and what they are good for.
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((HOST, PORT))
+
+time.sleep(0.05)
+
+
+ser = serial.Serial(port="/dev/ttyUSB0",baudrate=115200,timeout=1,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,bytesize=serial.EIGHTBITS)
 
 time.sleep(0.05)
 
@@ -49,6 +56,12 @@ def move_to_waypoint(req):
     elif "backward" == req.a:
         last_point[0] = last_point[0] + (req.b/1000)
         point = last_point
+    elif "close" == req.a:
+        ser.write("\x09\x10\x03\xE8\x00\x03\x06\x09\x00\x00\xFF\xFF\xFF\x42\x29")
+        time.sleep(1)
+    elif "open" == req.a:
+        ser.write("\x09\x10\x03\xE8\x00\x03\x06\x09\x00\x00\x00\xFF\xFF\x72\x19")
+        time.sleep(1)
     else:
         print "wrong mode option"
 
@@ -56,7 +69,7 @@ def move_to_waypoint(req):
 
     s.send("movel(p[" + str(point[0]) + ", " + str(point[1]) + ", " + str(point[2]) + ", " + str(point[3]) + ", " + str(point[4]) + ", " + str(point[5]) + "], a=0.2, v=0.1)\n")
     print(" the command send to socket is: movel(p[" + str(point[0]) + ", " + str(point[1]) + ", " + str(point[2]) + ", " + str(point[3]) + ", " + str(point[4]) + ", " + str(point[5]) + "], a=0.2, v=0.1)\n")
-    time.sleep(15)
+    time.sleep(10)
     return ur5_line_moveResponse("reached")
 
 
