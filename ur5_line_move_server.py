@@ -9,7 +9,7 @@ import math as m
 
 last_point=[110.39/1000,-323.23/1000,97.79/1000,3.1299,-0.0030,-0.0159]
 
-HOST = '192.168.1.12'     # The remote host
+HOST = '192.168.1.6'     # The remote host
 PORT = 30002              # The same port as used by the server
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
