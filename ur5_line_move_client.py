@@ -13,7 +13,7 @@ def ur5_line_move_client(mode, distance):
         print "Service call failed: %s"%e
 
 def usage():
-    return "%s [mode distance] {distance in meters}"%sys.argv[0]
+    return "%s [mode distance] {distance in mm}"%sys.argv[0]
 
 if __name__ == "__main__":
     if len(sys.argv) == 3:
