@@ -3,6 +3,7 @@
 import socket
 import time
 import rospy
+import serial
 from geometry_msgs.msg import Twist
 from move_ur5_arm.srv import *
 import math as m
