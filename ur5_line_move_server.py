@@ -40,7 +40,7 @@ def move_to_waypoint(req):
     elif "destination" == req.a:
         point = [-324.98/1000,-127.38/1000,130.18/1000,2.2745,-2.1644,-0.0242]
     elif "grasp" == req.a:
-        point = [-571.95/1000,-148.22/1000,159.42/1000,0.0139,-1.5544,0.0592]
+        point = [-564.06/1000,-89.90/1000,123.39/1000,0.1956,4.7207,0.0671]
     elif "up" == req.a:
         last_point[2] = last_point[2] + (req.b/1000)
         point = last_point
