@@ -10,7 +10,8 @@ import math as m
 from std_msgs.msg import Bool
 
 
-last_point=[110.39/1000,-323.23/1000,97.79/1000,3.1299,-0.0030,-0.0159]
+last_point = [110.39/1000,-323.23/1000,97.79/1000,3.1299,-0.0030,-0.0159]
+sleep_time = 0
 
 HOST = '192.168.1.6'     # The remote host
 PORT = 30002             # Zacobria has more info about the other ports and what they are good for.
@@ -33,40 +34,53 @@ time.sleep(0.05)
 def move_to_waypoint(req):
 # sends the waypoint to the socket w/ a=0.2 and v=0.1
     global last_point
+    global sleep_time
     if "home" == req.a:
         point = [110.38/1000,-323.24/1000,-654.19/1000,3.1299,-0.0030,-0.0158]
+        sleep_time = 10
     elif "midpoint" == req.a:
         point = [110.39/1000,-323.23/1000,97.79/1000,3.1299,-0.0030,-0.0159]
+        sleep_time = 7
     elif "destination" == req.a:
         point = [-324.98/1000,-127.38/1000,130.18/1000,2.2745,-2.1644,-0.0242]
+        sleep_time = 7
     elif "grasp" == req.a:
         point = [-564.06/1000,-89.90/1000,123.39/1000,0.1956,4.7207,0.0671]
+        sleep_time = 5
     elif "up" == req.a:
         last_point[2] = last_point[2] + (req.b/1000)
         point = last_point
+        sleep_time = 5
     elif "down" == req.a:
         last_point[2] = last_point[2] - (req.b/1000)
         point = last_point
+        sleep_time = 5
     elif "left" == req.a:
         last_point[1] = last_point[1] + (req.b/1000)
         point = last_point
+        sleep_time = 5
     elif "right" == req.a:
         last_point[1] = last_point[1] + (req.b/1000)
         point = last_point
+        sleep_time = 5
     elif "forward" == req.a:
         last_point[0] = last_point[0] - (req.b/1000)
         point = last_point
+        sleep_time = 5
     elif "backward" == req.a:
         last_point[0] = last_point[0] + (req.b/1000)
         point = last_point
+        sleep_time = 5
     elif "close" == req.a:
         ser.write("\x09\x10\x03\xE8\x00\x03\x06\x09\x00\x00\xFF\xFF\xFF\x42\x29")
         time.sleep(1)
         point = last_point
+        sleep_time = 1
     elif "open" == req.a:
         ser.write("\x09\x10\x03\xE8\x00\x03\x06\x09\x00\x00\x00\xFF\xFF\x72\x19")
         time.sleep(1)
         point = last_point
+        sleep_time = 1
     else:
         print "wrong mode option"
 
@@ -74,7 +88,7 @@ def move_to_waypoint(req):
 
     s.send("movel(p[" + str(point[0]) + ", " + str(point[1]) + ", " + str(point[2]) + ", " + str(point[3]) + ", " + str(point[4]) + ", " + str(point[5]) + "], a=0.2, v=0.1)\n")
     print(" the command send to socket is: movel(p[" + str(point[0]) + ", " + str(point[1]) + ", " + str(point[2]) + ", " + str(point[3]) + ", " + str(point[4]) + ", " + str(point[5]) + "], a=0.2, v=0.1)\n")
-    time.sleep(10)
+    time.sleep(sleep_time)
     return ur5_line_moveResponse("reached")
 
 
