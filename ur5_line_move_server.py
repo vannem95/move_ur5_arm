@@ -10,7 +10,7 @@ import math as m
 from std_msgs.msg import Bool
 
 
-last_point = [110.38/1000,-323.24/1000,-654.19/1000,3.1299,-0.0030,-0.0158]
+last_point = [110.38/1000,-323.24/1000,-620.19/1000,3.1299,-0.0030,-0.0158]
 sleep_time = 0
 
 HOST = '192.168.1.6'     # The remote host
@@ -36,7 +36,7 @@ def move_to_waypoint(req):
     global last_point
     global sleep_time
     if "home" == req.a:
-        point = [110.38/1000,-323.24/1000,-654.19/1000,3.1299,-0.0030,-0.0158]
+        point = [110.38/1000,-323.24/1000,-620.19/1000,3.1299,-0.0030,-0.0158]
         sleep_time = 10
     elif "midpoint" == req.a:
         point = [110.39/1000,-323.23/1000,97.79/1000,3.1299,-0.0030,-0.0159]
