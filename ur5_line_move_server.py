@@ -82,7 +82,7 @@ def move_to_waypoint(req):
         point = last_point
         sleep_time = 1
     else:
-        print "wrong mode option"
+        print "wrong mode option. Please enter one of these for a: [modes: ""home/midpoint/destination/grasp/open/close"" directions: ""up/down/left/right/forward/backward""] and b: [ If you chose preset modes for a then ""0"". If you chose directions for a then ""distance(in mm)""] "
 
     last_point = point
 
@@ -96,7 +96,7 @@ def ur5_line_move_server():
 # starts a service that takes direction(up/down/left/right/forward/backward)/checkpoint() and distance/0 
     rospy.init_node('ur5_line_move_server', anonymous=True)
     serv = rospy.Service('ur5_line_move_service', ur5_line_move, move_to_waypoint)
-    rospy.loginfo('Service initiated...\n\nArguments are \n\n1. Direction/Checkpoint {{home/midpoint/destination} {up/down/left/right/forward/backward -- from destination} }\n\n2. Distance(in mm) {""0"" zero if a checkpoint is chosen}\n\n\n\n CHECK THE POSE OF THE ROBOT THEN CHOOSE THE MODE AND DISTANCE ACCORDINGLY')
+    rospy.loginfo('Service initiated...\n\nArguments are \n\n1. Direction/mode {{home/midpoint/destination/grasp/open/close} {up/down/left/right/forward/backward -- from last point} }\n\n2. Distance(in mm) {""0"" if a checkpoint is chosen}\n\n\n\n CHECK THE POSE OF THE ROBOT THEN CHOOSE THE MODE AND DISTANCE ACCORDINGLY')
     rospy.spin()
 
 if __name__ == '__main__':
