@@ -26,6 +26,29 @@ ser = serial.Serial(port="/dev/ttyUSB0",baudrate=115200,timeout=1,parity=serial.
 
 time.sleep(0.05)
 
+############# Auto Gripper test --- START --- #####################
+
+ser.write("\x09\x10\x03\xE8\x00\x03\x06\x00\x00\x00\x00\x00\x00\x73\x30")
+data_raw = ser.readline()
+time.sleep(0.01)
+
+ser.write("\x09\x03\x07\xD0\x00\x01\x85\xCF")
+data_raw = ser.readline()
+time.sleep(1)
+
+
+print "Close gripper"
+ser.write("\x09\x10\x03\xE8\x00\x03\x06\x09\x00\x00\xFF\xFF\xFF\x42\x29")
+data_raw = ser.readline()
+time.sleep(2)
+
+print "Open gripper"
+ser.write("\x09\x10\x03\xE8\x00\x03\x06\x09\x00\x00\x00\xFF\xFF\x72\x19")
+data_raw = ser.readline()
+time.sleep(2)
+
+############# Auto Gripper test --- END --- #####################
+
 # --------example joint angle command--------
 # s.send ("movej([1.499063295, -0.05468042885,1.686686189, -0.04956735076,-4.76247993,3.127797186], a=1.0, v=0.1)" + "\n")
 # --------example move_to_point command--------
@@ -105,3 +128,5 @@ if __name__ == '__main__':
     except rospy.ROSInterruptException:
         pass
     s.close()
+
+
