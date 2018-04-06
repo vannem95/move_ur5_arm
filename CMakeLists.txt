@@ -57,6 +57,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
   FILES
   ur5_line_move.srv
+  AddTwoInts.srv
 )
 
 ## Generate actions in the 'action' folder
