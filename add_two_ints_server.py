@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from beginner_tutorials.srv import *
+from move_ur5_arm.srv import *
 import rospy
 
 def handle_add_two_ints(req):
