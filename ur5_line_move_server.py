@@ -77,11 +77,11 @@ def move_to_waypoint(req):
         point = last_point
         sleep_time = 5
     elif "left" == req.a:
-        last_point[1] = last_point[1] + (req.b/1000)
+        last_point[1] = last_point[1] - (req.b/1000)
         point = last_point
         sleep_time = 5
     elif "right" == req.a:
-        last_point[1] = last_point[1] - (req.b/1000)
+        last_point[1] = last_point[1] + (req.b/1000)
         point = last_point
         sleep_time = 5
     elif "forward" == req.a:
