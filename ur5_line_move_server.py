@@ -13,7 +13,7 @@ from std_msgs.msg import Bool
 last_point = [110.38/1000,-323.24/1000,-620.19/1000,3.1299,-0.0030,-0.0158]
 sleep_time = 0
 
-HOST = '192.168.10.7'     # The remote host
+HOST = '192.168.1.6'     # The remote host
 PORT = 30002             # Zacobria has more info about the other ports and what they are good for.
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
