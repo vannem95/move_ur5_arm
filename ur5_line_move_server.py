@@ -17,7 +17,7 @@ HOST = '192.168.1.6'     # The remote host
 PORT = 30002             # Zacobria has more info about the other ports and what they are good for.
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((HOST, PORT))
+s.connect(HOST, PORT)
 
 
 time.sleep(0.05)
