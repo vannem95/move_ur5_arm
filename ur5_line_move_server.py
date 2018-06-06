@@ -4,76 +4,113 @@ import socket
 import time
 import rospy
 import serial
+import math as m
+
 from geometry_msgs.msg import Twist
 from move_ur5_arm.srv import *
-import math as m
 from std_msgs.msg import Bool
 
 
-last_point = [-332.32/1000,-106.95/1000,-52.41/1000,0.0607,-2.7290,-0.0871]
-sleep_time = 0
+
+#########################################################################################
+#########################################################################################
+############################### UR5 Socket Connection ###################################
+#########################################################################################
+#########################################################################################
 
 HOST = '192.168.1.6'     # The remote host
 PORT = 30002             # Zacobria has more info about the other ports and what they are good for.
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((HOST, PORT))
-
-
 time.sleep(0.05)
 
+#########################################################################################
+
+
+
+#########################################################################################
+#########################################################################################
+############################### Gripper Connection ######################################
+#########################################################################################
+#########################################################################################
 
 ser = serial.Serial(port="/dev/ttyUSB0",baudrate=115200,timeout=1,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,bytesize=serial.EIGHTBITS)
-
 time.sleep(0.05)
 
-############# Auto Gripper test --- START --- #####################
-
 ser.write("\x09\x10\x03\xE8\x00\x03\x06\x00\x00\x00\x00\x00\x00\x73\x30")
-
 data_raw = ser.readline()
 time.sleep(0.01)
-
 ser.write("\x09\x03\x07\xD0\x00\x01\x85\xCF")
-
 data_raw = ser.readline()
-time.sleep(1)
-
+time.sleep(0.5)
 print "Activating Gripper"
 print "Now closing gripper.."
-
 ser.write("\x09\x10\x03\xE8\x00\x03\x06\x09\x00\x00\xFF\xFF\xFF\x42\x29")
-
 data_raw = ser.readline()
-time.sleep(2)
-
+time.sleep(0.5)
 print "Now opening gripper.."
-
 ser.write("\x09\x10\x03\xE8\x00\x03\x06\x09\x00\x00\x00\xFF\xFF\x72\x19")
-
 data_raw = ser.readline()
-time.sleep(2)
-
+time.sleep(0.5)
 print "Gripper ready"
 
-############# Auto Gripper test --- END --- #####################
+#########################################################################################
+
+
+
+#########################################################################################
+#########################################################################################
+############################### Initializing points #####################################
+#########################################################################################
+#########################################################################################
+
+last_point   = [-332.32/1000,-106.95/1000,-52.41/1000,0.0607,-2.7290,-0.0871]
+home_point   = [-332.32/1000,-106.95/1000,-52.41/1000,0.0607,-2.7290,-0.0871]
+grasp_point  = [-564.06/1000,-89.90/1000,123.39/1000,0.1956,4.7207,0.0671]
+
+x_alligned   = 57.68/1000
+
+x_correction = 0.0
+y_correction = 0.0
+z_correction = 0.0
+
+#########################################################################################
+
 
 # --------example joint angle command--------
 # s.send ("movej([1.499063295, -0.05468042885,1.686686189, -0.04956735076,-4.76247993,3.127797186], a=1.0, v=0.1)" + "\n")
 # --------example move_to_point command--------
 # s.send ("movej(p[0.00, -0.32, -0.6, 2.22, -2.22, 0.00], a=0.2, v=0.1)" + "\n")
 
+
+def marker_callback(point):
+    global x_correction
+    global y_correction
+    global z_correction
+    global x_alligned
+
+    x_marker = point.point.x
+    y_marker = point.point.y
+    z_marker = point.point.z
+
+    x_correction = x_marker - x_alligned
+
 def move_to_waypoint(req):
-# sends the waypoint to the socket w/ a=0.2 and v=0.1
+# sends the waypoint to the socket w/ a=0.2 and v=0.2
     global last_point
-    global sleep_time
+    global home_point
+    global grasp_point
+    global x_correction
 
     if "home" == req.a:
-        point = [-332.32/1000,-106.95/1000,-52.41/1000,0.0607,-2.7290,-0.0871]
-
+        point = home_point
 
     elif "grasp" == req.a:
-        point = [-564.06/1000,-89.90/1000,123.39/1000,0.1956,4.7207,0.0671]
+        point = grasp_point
+
+    elif "allign" == req.a:
+        point = grasp_point[1] + x_correction 
 
     elif "up" == req.a:
         last_point[2] = last_point[2] + (req.b/1000)
@@ -101,11 +138,11 @@ def move_to_waypoint(req):
 
     elif "close" == req.a:
         ser.write("\x09\x10\x03\xE8\x00\x03\x06\x09\x00\x00\xFF\xFF\xFF\x42\x29")
-        time.sleep(1)
+        time.sleep(0.5)
         point = last_point
     elif "open" == req.a:
         ser.write("\x09\x10\x03\xE8\x00\x03\x06\x09\x00\x00\x00\xFF\xFF\x72\x19")
-        time.sleep(1)
+        time.sleep(0.5)
         point = last_point
     else:
         print "wrong mode option. Please enter one of these for a: [modes: ""home/midpoint/destination/grasp/open/close"" directions: ""up/down/left/right/forward/backward""] and b: [ If you chose preset modes for a then ""0"". If you chose directions for a then ""distance(in mm)""] "
@@ -123,7 +160,12 @@ def ur5_line_move_server():
     rospy.init_node('ur5_line_move_server', anonymous=True)
     serv = rospy.Service('ur5_line_move_service', ur5_line_move, move_to_waypoint)
     rospy.loginfo('Service initiated...\n\nArguments are \n\n1. Direction/mode {{ home / grasp / open / close} { up / down / left / right / forward / backward -- from last point} }\n\n2. Distance(in mm) {""0"" if a checkpoint is chosen}\n\n\n\n CHECK THE POSE OF THE ROBOT THEN CHOOSE THE MODE AND DISTANCE ACCORDINGLY')
+
+    rospy.Subscriber('/visp_auto_tracker/object_position', PoseStamped, marker_callback)
+    rospy.loginfo('Subscribing to Marker data for pickup allignment of the ur5 arm')
     rospy.spin()
+
+
 
 if __name__ == '__main__':
     try:
