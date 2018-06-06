@@ -110,7 +110,8 @@ def move_to_waypoint(req):
         point = grasp_point
 
     elif "allign" == req.a:
-        point = grasp_point[1] + x_correction 
+        point = grasp_point
+        point[1] = point[1] + x_correction 
 
     elif "up" == req.a:
         last_point[2] = last_point[2] + (req.b/1000)
