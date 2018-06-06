@@ -6,7 +6,7 @@ import rospy
 import serial
 import math as m
 
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Twist, PoseStamped
 from move_ur5_arm.srv import *
 from std_msgs.msg import Bool
 
