@@ -90,9 +90,9 @@ def marker_callback(point):
     global z_correction
     global x_alligned
 
-    x_marker = point.point.x
-    y_marker = point.point.y
-    z_marker = point.point.z
+    x_marker = point.pose.position.x
+    y_marker = point.pose.position.y
+    z_marker = point.pose.position.z
 
     x_correction = x_marker - x_alligned
 
