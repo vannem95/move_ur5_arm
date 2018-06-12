@@ -113,9 +113,9 @@ def marker_callback(point):
     y_marker = point.pose.position.y
     z_marker = point.pose.position.z
 
-    x_correction = range_checker(x_marker - x_alligned, correction_range)
-    y_correction = range_checker(y_marker - y_alligned, correction_range)
-    z_correction = range_checker(z_marker - z_alligned, correction_range)
+    x_correction = x_marker - x_alligned
+    y_correction = y_marker - y_alligned
+    z_correction = z_marker - z_alligned
 
 
 def move_to_waypoint(req):
