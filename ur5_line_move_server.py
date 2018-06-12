@@ -65,15 +65,20 @@ print "Gripper ready"
 #########################################################################################
 #########################################################################################
 
-last_point   = [-332.32/1000,-106.95/1000,-52.41/1000,0.0607,-2.7290,-0.0871]
-home_point   = [-332.32/1000,-106.95/1000,-52.41/1000,0.0607,-2.7290,-0.0871]
-grasp_point  = [-564.06/1000,-89.90/1000,123.39/1000,0.1956,4.7207,0.0671]
+last_point        = [-332.32/1000,-106.95/1000,-52.41/1000,0.0607,-2.7290,-0.0871]
+home_point        = [-332.32/1000,-106.95/1000,-52.41/1000,0.0607,-2.7290,-0.0871]
+grasp_point       = [-564.06/1000,-89.90/1000,123.39/1000,0.1956,4.7207,0.0671]
 
-x_alligned   = 57.68/1000
+x_alligned        = 150.01/1000
+y_alligned        = -52.00/1000
+z_alligned        = 417.12/1000
 
-x_correction = 0.0
-y_correction = 0.0
-z_correction = 0.0
+correction_range  = 100/1000
+
+
+x_correction      = 0.0
+y_correction      = 0.0
+z_correction      = 0.0
 
 #########################################################################################
 
@@ -83,25 +88,45 @@ z_correction = 0.0
 # --------example move_to_point command--------
 # s.send ("movej(p[0.00, -0.32, -0.6, 2.22, -2.22, 0.00], a=0.2, v=0.1)" + "\n")
 
+def range_checker(value,range):
+
+    if (value < -range) or (value > range):
+        output = 0
+    else:
+        output = value
+    return output
+
 
 def marker_callback(point):
     global x_correction
     global y_correction
     global z_correction
+
     global x_alligned
+    global y_alligned
+    global z_alligned
+
+    global correction_range
+
 
     x_marker = point.pose.position.x
     y_marker = point.pose.position.y
     z_marker = point.pose.position.z
 
-    x_correction = x_marker - x_alligned
+    x_correction = range_checker(x_marker - x_alligned, correction_range)
+    y_correction = range_checker(y_marker - y_alligned, correction_range)
+    z_correction = range_checker(z_marker - z_alligned, correction_range)
+
 
 def move_to_waypoint(req):
 # sends the waypoint to the socket w/ a=0.2 and v=0.2
     global last_point
     global home_point
     global grasp_point
+
     global x_correction
+    global y_correction
+    global z_correction
 
     if "home" == req.a:
         point = home_point
@@ -112,6 +137,8 @@ def move_to_waypoint(req):
     elif "allign" == req.a:
         point = grasp_point
         point[1] = point[1] + x_correction 
+        point[2] = point[2] - y_correction 
+        point[0] = point[0] - z_correction 
 
     elif "up" == req.a:
         last_point[2] = last_point[2] + (req.b/1000)
