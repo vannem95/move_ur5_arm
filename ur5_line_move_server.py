@@ -5,6 +5,7 @@ import time
 import rospy
 import serial
 import math as m
+import copy as copy
 
 from geometry_msgs.msg import Twist, PoseStamped
 from move_ur5_arm.srv import *
@@ -135,7 +136,7 @@ def move_to_waypoint(req):
         point = grasp_point
 
     elif "allign" == req.a:
-        point = grasp_point
+        point = copy.copy(grasp_point)
         point[1] = point[1] + x_correction 
         point[2] = point[2] - y_correction 
         point[0] = point[0] - z_correction 
