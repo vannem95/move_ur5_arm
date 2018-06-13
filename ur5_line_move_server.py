@@ -179,6 +179,7 @@ def move_to_waypoint(req):
 
     s.send("movel(p[" + str(point[0]) + ", " + str(point[1]) + ", " + str(point[2]) + ", " + str(point[3]) + ", " + str(point[4]) + ", " + str(point[5]) + "], a=0.2, v=0.2)\n")
     print(" the command send to socket is: movel(p[" + str(point[0]) + ", " + str(point[1]) + ", " + str(point[2]) + ", " + str(point[3]) + ", " + str(point[4]) + ", " + str(point[5]) + "], a=0.2, v=0.2)\n")
+    print " grasp point: " , grasp_point , "\n"
     time.sleep(2)
     return ur5_line_moveResponse("reached")
 
